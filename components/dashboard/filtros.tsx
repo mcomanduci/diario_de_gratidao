@@ -30,6 +30,11 @@ export default function Filtros({
   const [diarios, setDiarios] = useState<Diario[]>(initialDiarios);
   const [isPending, startTransition] = useTransition();
 
+  // Sincroniza com initialDiarios quando mudar (após revalidatePath)
+  useEffect(() => {
+    setDiarios(initialDiarios);
+  }, [initialDiarios]);
+
   // Debounce da busca
   useEffect(() => {
     const timer = setTimeout(() => {

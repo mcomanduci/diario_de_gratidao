@@ -12,6 +12,7 @@ import {
   DialogClose,
   DialogContent,
   DialogFooter,
+  DialogTitle,
 } from "@/components/ui/dialog";
 import {
   Form,
@@ -128,6 +129,7 @@ export default function NewDiarioContent() {
 
   return (
     <DialogContent className="sm:max-w-[425px]">
+      <DialogTitle className="sr-only">Criar novo diário</DialogTitle>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField

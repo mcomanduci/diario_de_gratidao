@@ -7,18 +7,35 @@ import { z } from "zod";
 import { db } from "@/db/drizzle";
 import { diario } from "@/db/schema";
 import { auth } from "@/lib/auth";
+import {
+  CLOUDINARY_URL_PREFIX,
+  MAX_DESCRIPTION_LENGTH,
+  MAX_SEARCH_LENGTH,
+  MAX_TITLE_LENGTH,
+  UUID_REGEX,
+} from "@/lib/constants";
 
 const diarioSchema = z.object({
   title: z
     .string()
+    .trim()
     .min(1, "Título é obrigatório")
-    .max(100, "Título muito longo"),
+    .max(MAX_TITLE_LENGTH, "Título muito longo")
+    .refine((val) => val.length > 0, "Título não pode ser apenas espaços"),
   description: z
     .string()
+    .trim()
     .min(1, "Descrição é obrigatória")
-    .max(500, "Descrição muito longa"),
+    .max(MAX_DESCRIPTION_LENGTH, "Descrição muito longa")
+    .refine((val) => val.length > 0, "Descrição não pode ser apenas espaços"),
   type: z.enum(["Família", "Trabalho", "Religioso", "Outros"]),
-  image: z.string().url("URL de imagem inválida"),
+  image: z
+    .string()
+    .url("URL de imagem inválida")
+    .refine(
+      (url) => url.startsWith(CLOUDINARY_URL_PREFIX),
+      "URL de imagem deve ser do Cloudinary",
+    ),
 });
 
 export async function getDiarios(filters?: {
@@ -28,6 +45,34 @@ export async function getDiarios(filters?: {
   limit?: number;
 }) {
   try {
+    // Valida filtros de entrada
+    if (filters?.search && filters.search.length > MAX_SEARCH_LENGTH) {
+      return {
+        success: false,
+        error: "Busca muito longa",
+        diarios: [],
+        total: 0,
+      };
+    }
+
+    if (filters?.limit && (filters.limit < 1 || filters.limit > 100)) {
+      return {
+        success: false,
+        error: "Limite inválido",
+        diarios: [],
+        total: 0,
+      };
+    }
+
+    if (filters?.page && filters.page < 1) {
+      return {
+        success: false,
+        error: "Página inválida",
+        diarios: [],
+        total: 0,
+      };
+    }
+
     // Pega usuário autenticado
     const session = await auth.api.getSession({
       headers: await headers(),
@@ -94,6 +139,11 @@ export async function getDiarios(filters?: {
 
 export async function getDiarioById(id: string) {
   try {
+    // Valida formato do ID (UUID)
+    if (!UUID_REGEX.test(id)) {
+      return { success: false, error: "ID inválido", diario: null };
+    }
+
     const session = await auth.api.getSession({
       headers: await headers(),
     });
@@ -165,6 +215,13 @@ export async function updateDiario(
   },
 ) {
   try {
+    // Valida formato do ID (UUID)
+    const uuidRegex =
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(id)) {
+      return { success: false, error: "ID inválido" };
+    }
+
     const session = await auth.api.getSession({
       headers: await headers(),
     });
@@ -201,6 +258,13 @@ export async function updateDiario(
 
 export async function deleteDiario(id: string) {
   try {
+    // Valida formato do ID (UUID)
+    const uuidRegex =
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(id)) {
+      return { success: false, error: "ID inválido" };
+    }
+
     const session = await auth.api.getSession({
       headers: await headers(),
     });

@@ -8,6 +8,7 @@ import {
   DialogClose,
   DialogContent,
   DialogFooter,
+  DialogTitle,
 } from "@/components/ui/dialog";
 
 export default function DeleteDiarioContent({
@@ -30,9 +31,9 @@ export default function DeleteDiarioContent({
   return (
     <DialogContent className="sm:max-w-[425px]">
       <div className="py-4 text-center">
-        <h2 className="mb-2 text-lg font-semibold text-gray-900">
+        <DialogTitle className="mb-2 text-lg font-semibold text-gray-900">
           Tem certeza que deseja excluir este diário?
-        </h2>
+        </DialogTitle>
         <p className="text-sm text-gray-500">
           Esta ação não pode ser desfeita. Todas as entradas associadas a este
           diário também serão excluídas.

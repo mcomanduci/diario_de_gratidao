@@ -1,6 +1,7 @@
 "use server";
 
 import { v2 as cloudinary } from "cloudinary";
+import { ALLOWED_IMAGE_TYPES, MAX_FILE_SIZE } from "@/lib/constants";
 
 // Configura Cloudinary
 cloudinary.config({
@@ -15,6 +16,19 @@ export async function uploadImage(formData: FormData) {
 
     if (!file) {
       return { success: false, error: "Nenhum arquivo enviado" };
+    }
+
+    // Validações de segurança
+    if (file.size > MAX_FILE_SIZE) {
+      return { success: false, error: "Arquivo muito grande. Máximo 5MB" };
+    }
+
+    if (
+      !ALLOWED_IMAGE_TYPES.includes(
+        file.type as (typeof ALLOWED_IMAGE_TYPES)[number],
+      )
+    ) {
+      return { success: false, error: "Tipo de arquivo não permitido" };
     }
 
     // Converte File para base64

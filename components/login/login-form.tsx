@@ -2,7 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LogInIcon } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -20,6 +19,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
+import { Dialog, DialogTrigger } from "../ui/dialog";
+import ForgotPasswordDialog from "./forgot-password-dialog";
 
 export default function LoginForm() {
   const [login, setLogin] = useState(true);
@@ -159,12 +160,14 @@ export default function LoginForm() {
                 <FormDescription className="flex justify-end">
                   {" "}
                   {login && (
-                    <Link
-                      href="#"
-                      className="hover:text-primary-blue text-xs text-[#0c29ab]"
-                    >
-                      Esqueci minha senha
-                    </Link>
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <span className="hover:text-primary-blue cursor-pointer text-xs text-[#0c29ab]">
+                          Esqueci minha senha
+                        </span>
+                      </DialogTrigger>
+                      <ForgotPasswordDialog />
+                    </Dialog>
                   )}
                 </FormDescription>
               </FormItem>
