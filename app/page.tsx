@@ -10,17 +10,20 @@ import {
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen items-center justify-center font-sans dark:bg-black">
-      <Card className="w-full max-w-sm min-w-[400px] space-y-6 border-[rgba(235,243,255,1)] p-6 shadow-[0_0_2px_2px_rgba(235,243,255,1)]">
-        <CardHeader className="m-0 flex flex-col items-center justify-center gap-0 p-0">
-          <CardTitle className="p-1">
-            <LaughIcon className="text-primary-blue" size={50} />
-          </CardTitle>
-          <CardDescription className="text-primary-blue text-sm font-semibold">
-            Diário de Gratidão
-          </CardDescription>
+    <main className="bg-muted flex min-h-screen items-center justify-center p-4 font-sans">
+      <Card className="w-full max-w-md">
+        <CardHeader className="flex flex-col items-center justify-center space-y-2 text-center">
+          <div className="bg-primary/10 rounded-full p-3">
+            <LaughIcon className="text-primary size-8" />
+          </div>
+          <div className="space-y-1">
+            <CardTitle className="text-2xl font-bold">Bem-vindo</CardTitle>
+            <CardDescription className="text-base">
+              Diário de Gratidão
+            </CardDescription>
+          </div>
         </CardHeader>
-        <CardContent className="mb-0 space-y-6 p-0">
+        <CardContent>
           <LoginForm />
         </CardContent>
       </Card>

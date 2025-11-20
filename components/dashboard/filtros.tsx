@@ -50,16 +50,16 @@ export default function Filtros({
   }, [search, type]);
 
   return (
-    <>
-      <div className="grid grid-cols-2 gap-2">
+    <div className="space-y-6">
+      <div className="flex flex-col gap-4 sm:flex-row">
         <Input
-          className="h-10 ring-0 placeholder:text-gray-300"
+          className="flex-1"
           placeholder="Pesquise por nome"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
         <Select value={type} onValueChange={setType}>
-          <SelectTrigger className="w-[200px]">
+          <SelectTrigger className="w-full sm:w-[200px]">
             <SelectValue placeholder="Selecione" />
           </SelectTrigger>
           <SelectContent>
@@ -73,7 +73,7 @@ export default function Filtros({
       </div>
 
       {search || type !== "Todos" ? (
-        <p className="text-sm text-gray-600">
+        <p className="text-muted-foreground text-sm">
           {isPending
             ? "Buscando..."
             : `${diarios.length} resultado(s) encontrado(s)`}
@@ -82,10 +82,10 @@ export default function Filtros({
 
       {isPending ? (
         <div className="py-8 text-center">
-          <p className="text-gray-500">Carregando...</p>
+          <p className="text-muted-foreground">Carregando...</p>
         </div>
       ) : diarios.length > 0 ? (
-        <div className="space-y-2">
+        <div className="flex flex-col gap-4">
           {diarios.map((diario) => (
             <DiarioItem key={diario.id} diario={diario} />
           ))}
@@ -94,7 +94,7 @@ export default function Filtros({
         <div>
           {search || type !== "Todos" ? (
             <div className="py-8 text-center">
-              <p className="text-gray-500">
+              <p className="text-muted-foreground">
                 Nenhum diário encontrado com os filtros aplicados.
               </p>
             </div>
@@ -103,6 +103,6 @@ export default function Filtros({
           )}
         </div>
       )}
-    </>
+    </div>
   );
 }

@@ -127,11 +127,7 @@ export default function ChangePasswordForm() {
             </FormItem>
           )}
         />
-        <Button
-          type="submit"
-          disabled={isLoading}
-          className="hover:bg-primary-blue h-11 flex-1 bg-[#0c29ab] disabled:opacity-50"
-        >
+        <Button type="submit" disabled={isLoading} className="w-full">
           {isLoading ? "Alterando..." : "Alterar Senha"}
         </Button>
       </form>

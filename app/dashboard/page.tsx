@@ -12,20 +12,22 @@ export const metadata: Metadata = {
 
 export default function Dashboard() {
   return (
-    <>
+    <div className="flex min-h-screen flex-col">
       <Suspense
         fallback={
-          <div className="flex h-20 items-center justify-between gap-3 bg-[#d8d8f9] px-6 py-5" />
+          <div className="bg-background flex h-16 items-center justify-between border-b px-6" />
         }
       >
         <Header />
       </Suspense>
-      <main className="grid min-h-full grid-cols-[150px_1fr] p-2">
+      <div className="flex flex-1">
         <Sidebar />
-        <Suspense fallback={<ContentLoading />}>
-          <Content />
-        </Suspense>
-      </main>
-    </>
+        <main className="bg-muted/30 flex-1 p-6">
+          <Suspense fallback={<ContentLoading />}>
+            <Content />
+          </Suspense>
+        </main>
+      </div>
+    </div>
   );
 }

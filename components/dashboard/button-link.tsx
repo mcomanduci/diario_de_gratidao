@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 
 export default function ButtonLink({
@@ -13,10 +14,14 @@ export default function ButtonLink({
 }) {
   const pathname = usePathname();
   const isActive = pathname === linkToPage;
+
   return (
     <Button
-      variant="outline"
-      className={`min-h-10 w-full cursor-pointer font-normal ${isActive && "border-[#afcef8] bg-[#afcef8] text-[#1e6df6] hover:bg-[#afcef8] hover:text-[#1e6df6]"}`}
+      variant={isActive ? "secondary" : "ghost"}
+      className={cn(
+        "w-full justify-start font-normal",
+        isActive && "bg-secondary text-secondary-foreground font-medium",
+      )}
       asChild
     >
       <Link href={linkToPage}>{pageName}</Link>

@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import type { Diario } from "@/types/types";
 import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
 import { Dialog } from "../ui/dialog";
 import DeleteDiarioContent from "./delete-diario-content";
 import EditDiarioContent from "./edit-diario-content";
@@ -22,8 +23,8 @@ export default function DiarioItem({ diario }: { diario: Diario }) {
 
   return (
     <>
-      <Card className="rounded-md bg-[#ebf3ff] p-0">
-        <CardContent className="flex gap-4 p-3">
+      <Card className="overflow-hidden p-0">
+        <CardContent className="flex gap-4 p-4">
           <Image
             src={diario.image}
             alt={`Imagem do diário: ${diario.title}`}
@@ -32,37 +33,40 @@ export default function DiarioItem({ diario }: { diario: Diario }) {
             className="size-[100px] rounded-md object-cover"
             priority
           />
-          <div className="w-full space-y-2">
-            <div className="flex justify-between">
-              <h2 className="font-semibold">{diario.title}</h2>
+          <div className="flex w-full flex-col">
+            <div className="flex items-start justify-between">
+              <h2 className="text-lg font-semibold">{diario.title}</h2>
               <div className="flex items-center gap-2">
-                <Badge className="rounded-md bg-white text-xs text-gray-700">
+                <Badge variant="secondary" className="rounded-md">
                   {diario.type}
                 </Badge>
                 <DropdownMenu>
-                  <DropdownMenuTrigger aria-label="Opções do diário">
-                    <MenuIcon className="text-primary-blue size-5" />
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon" className="h-8 w-8">
+                      <MenuIcon className="size-4" />
+                      <span className="sr-only">Opções</span>
+                    </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="p-2">
-                    <DropdownMenuItem
-                      className="text-primary-blue flex h-10 items-center justify-center text-base"
-                      onSelect={() => setEditDialogOpen(true)}
-                    >
-                      <SquarePenIcon className="text-primary-blue size-5" />{" "}
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onSelect={() => setEditDialogOpen(true)}>
+                      <SquarePenIcon className="mr-2 size-4" />
                       Editar
                     </DropdownMenuItem>
 
                     <DropdownMenuItem
-                      className="flex h-10 items-center justify-center text-base text-red-600"
+                      className="text-destructive focus:text-destructive"
                       onSelect={() => setDeleteDialogOpen(true)}
                     >
-                      <Trash2Icon className="size-5 text-red-600" /> Excluir
+                      <Trash2Icon className="text-destructive mr-2 size-4" />
+                      Excluir
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
             </div>
-            <p className="max-w-100 text-xs">{diario.description}</p>
+            <p className="text-muted-foreground text-sm">
+              {diario.description}
+            </p>
           </div>
         </CardContent>
       </Card>

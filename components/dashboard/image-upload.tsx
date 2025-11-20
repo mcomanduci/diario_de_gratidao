@@ -87,7 +87,7 @@ export function ImageUpload({ value, onChange }: ImageUploadProps) {
     <div className="mx-auto">
       <Label
         htmlFor="picture-upload"
-        className="border-muted-foreground/25 hover:bg-accent/50 bg-background relative flex h-40 w-40 cursor-pointer flex-col items-center justify-center overflow-hidden rounded-md border-2 transition-colors"
+        className="border-muted-foreground/25 hover:bg-muted/50 bg-muted/10 relative flex h-40 w-40 cursor-pointer flex-col items-center justify-center overflow-hidden rounded-md border-2 border-dashed transition-colors"
       >
         {preview ? (
           <>

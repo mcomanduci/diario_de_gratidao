@@ -129,7 +129,7 @@ export default function NewDiarioContent() {
 
   return (
     <DialogContent className="sm:max-w-[425px]">
-      <DialogTitle className="sr-only">Criar novo diário</DialogTitle>
+      <DialogTitle>Criar novo diário</DialogTitle>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
@@ -150,13 +150,9 @@ export default function NewDiarioContent() {
             name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-xs font-normal">Título</FormLabel>
+                <FormLabel>Título</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="Digite o título"
-                    className="h-10"
-                    {...field}
-                  />
+                  <Input placeholder="Digite o título" {...field} />
                 </FormControl>
                 <FormMessage className="text-xs" />
               </FormItem>
@@ -168,13 +164,9 @@ export default function NewDiarioContent() {
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-xs font-normal">Descrição</FormLabel>
+                <FormLabel>Descrição</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="Digite a descrição"
-                    className="h-10"
-                    {...field}
-                  />
+                  <Input placeholder="Digite a descrição" {...field} />
                 </FormControl>
                 <FormMessage className="text-xs" />
               </FormItem>
@@ -186,7 +178,7 @@ export default function NewDiarioContent() {
             name="type"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-xs font-normal">Tipo</FormLabel>
+                <FormLabel>Tipo</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -208,22 +200,18 @@ export default function NewDiarioContent() {
             )}
           />
 
-          <DialogFooter className="sm:justify-between">
+          <DialogFooter className="gap-2 sm:justify-between">
             <DialogClose asChild>
               <Button
                 ref={closeButtonRef}
                 type="button"
                 variant="outline"
-                className="hover:text-primary-blue hover:border-primary-blue h-11 flex-1 border-[#0c29ab] text-[#0c29ab] hover:bg-transparent"
+                className="flex-1"
               >
                 Cancelar
               </Button>
             </DialogClose>
-            <Button
-              type="submit"
-              disabled={isLoading}
-              className="hover:bg-primary-blue h-11 flex-1 bg-[#0c29ab] disabled:opacity-50"
-            >
+            <Button type="submit" disabled={isLoading} className="flex-1">
               {isLoading ? "Criando..." : "Criar"}
             </Button>
           </DialogFooter>

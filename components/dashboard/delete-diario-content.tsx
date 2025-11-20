@@ -7,7 +7,9 @@ import { Button } from "@/components/ui/button";
 import {
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
+  DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
 
@@ -30,28 +32,23 @@ export default function DeleteDiarioContent({
 
   return (
     <DialogContent className="sm:max-w-[425px]">
-      <div className="py-4 text-center">
-        <DialogTitle className="mb-2 text-lg font-semibold text-gray-900">
-          Tem certeza que deseja excluir este diário?
-        </DialogTitle>
-        <p className="text-sm text-gray-500">
+      <DialogHeader>
+        <DialogTitle>Tem certeza que deseja excluir este diário?</DialogTitle>
+        <DialogDescription>
           Esta ação não pode ser desfeita. Todas as entradas associadas a este
           diário também serão excluídas.
-        </p>
-      </div>
-      <DialogFooter className="sm:justify-between">
+        </DialogDescription>
+      </DialogHeader>
+      <DialogFooter className="gap-2 sm:justify-between">
         <DialogClose asChild>
-          <Button
-            ref={closeButtonRef}
-            variant="outline"
-            className="hover:text-primary-blue hover:border-primary-blue h-11 flex-1 border-[#0c29ab] text-[#0c29ab] hover:bg-transparent"
-          >
+          <Button ref={closeButtonRef} variant="outline" className="flex-1">
             Cancelar
           </Button>
         </DialogClose>
         <Button
+          variant="destructive"
           onClick={() => onDelete(diarioId)}
-          className="hover:bg-primary-blue h-11 flex-1 bg-[#b0200c]"
+          className="flex-1"
         >
           Excluir
         </Button>

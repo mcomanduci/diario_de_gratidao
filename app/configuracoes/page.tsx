@@ -13,47 +13,47 @@ import { Separator } from "@/components/ui/separator";
 
 export default function ConfiguracoesPage() {
   return (
-    <>
+    <div className="flex min-h-screen flex-col">
       <Header />
-      <main className="grid min-h-full grid-cols-[150px_1fr] p-2">
+      <div className="flex flex-1">
         <Sidebar />
-        <div className="space-y-6 p-4">
-          <div>
-            <h1 className="text-primary-blue text-2xl font-bold">
-              Configurações
-            </h1>
-            <p className="text-muted-foreground text-sm">
-              Gerencie as configurações da sua conta e preferências.
-            </p>
-          </div>
-          <Separator />
-          <div className="grid gap-6 md:grid-cols-2">
-            <Card>
-              <CardHeader>
-                <CardTitle>Perfil</CardTitle>
-                <CardDescription>
-                  Atualize suas informações públicas.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ChangeUsernameForm />
-              </CardContent>
-            </Card>
+        <main className="bg-muted/30 flex-1 p-6">
+          <div className="space-y-6">
+            <div>
+              <h1 className="text-2xl font-bold">Configurações</h1>
+              <p className="text-muted-foreground text-sm">
+                Gerencie as configurações da sua conta e preferências.
+              </p>
+            </div>
+            <Separator />
+            <div className="grid gap-6 md:grid-cols-2">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Perfil</CardTitle>
+                  <CardDescription>
+                    Atualize suas informações públicas.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ChangeUsernameForm />
+                </CardContent>
+              </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Segurança</CardTitle>
-                <CardDescription>
-                  Gerencie sua senha e segurança da conta.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ChangePasswordForm />
-              </CardContent>
-            </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Segurança</CardTitle>
+                  <CardDescription>
+                    Gerencie sua senha e segurança da conta.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ChangePasswordForm />
+                </CardContent>
+              </Card>
+            </div>
           </div>
-        </div>
-      </main>
-    </>
+        </main>
+      </div>
+    </div>
   );
 }

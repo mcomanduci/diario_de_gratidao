@@ -9,18 +9,15 @@ export default async function Content() {
   const { diarios } = await getDiarios();
 
   return (
-    <section className="flex flex-col gap-4 p-4">
-      <div className="flex justify-between">
-        <h1 className="text-primary-blue text-2xl font-bold">
+    <section className="flex flex-col gap-4">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold tracking-tight">
           Meus diários de gratidão
         </h1>
         <Dialog>
           <DialogTrigger asChild>
-            <Button
-              className="rouded-md h-10 bg-[#0c29ab] p-0 px-5"
-              aria-label="Criar novo diário"
-            >
-              <PlusIcon className="size-6" aria-hidden="true" />
+            <Button className="h-10 px-5" aria-label="Criar novo diário">
+              <PlusIcon className="mr-2 size-4" aria-hidden="true" />
               <span>Novo diário</span>
             </Button>
           </DialogTrigger>

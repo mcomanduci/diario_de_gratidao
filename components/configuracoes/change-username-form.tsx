@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { updateUsername } from "@/actions/user";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -15,7 +16,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { updateUsername } from "@/actions/user";
 
 const formSchema = z.object({
   name: z.string().min(2, "Nome é obrigatório"),
@@ -73,11 +73,7 @@ export default function ChangeUsernameForm() {
             </FormItem>
           )}
         />
-        <Button
-          type="submit"
-          disabled={isLoading}
-          className="hover:bg-primary-blue h-11 flex-1 bg-[#0c29ab] disabled:opacity-50"
-        >
+        <Button type="submit" disabled={isLoading} className="w-full">
           {isLoading ? "Alterando..." : "Alterar Nome"}
         </Button>
       </form>

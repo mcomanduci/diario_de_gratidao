@@ -100,22 +100,16 @@ export default function LoginForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-4">
           {!login && (
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem className="grid gap-1">
-                  <FormLabel className="text-xs font-normal">
-                    Seu nome
-                  </FormLabel>
+                  <FormLabel>Seu nome</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="Digite seu nome"
-                      {...field}
-                      className="h-10 placeholder:text-gray-300"
-                    />
+                    <Input placeholder="Digite seu nome" {...field} />
                   </FormControl>
                   <FormMessage className="text-xs" />
                 </FormItem>
@@ -127,12 +121,11 @@ export default function LoginForm() {
             name="email"
             render={({ field }) => (
               <FormItem className="grid gap-1">
-                <FormLabel className="text-xs font-normal">E-mail</FormLabel>
+                <FormLabel>E-mail</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="Digite seu e-mail"
                     {...field}
-                    className="h-10 placeholder:text-gray-300"
                     type="email"
                     autoComplete="email"
                   />
@@ -146,12 +139,11 @@ export default function LoginForm() {
             name="password"
             render={({ field }) => (
               <FormItem className="grid gap-1">
-                <FormLabel className="text-xs font-normal">Senha</FormLabel>
+                <FormLabel>Senha</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="*******"
                     {...field}
-                    className="h-10 placeholder:text-gray-300"
                     type="password"
                     autoComplete={login ? "current-password" : "new-password"}
                   />
@@ -162,9 +154,9 @@ export default function LoginForm() {
                   {login && (
                     <Dialog>
                       <DialogTrigger asChild>
-                        <span className="hover:text-primary-blue cursor-pointer text-xs text-[#0c29ab]">
+                        <Button variant="link" className="h-auto p-0 text-xs">
                           Esqueci minha senha
-                        </span>
+                        </Button>
                       </DialogTrigger>
                       <ForgotPasswordDialog />
                     </Dialog>
@@ -175,23 +167,20 @@ export default function LoginForm() {
           />
         </div>
         <div className="mt-6 space-y-6 p-0">
-          <p className="text-center text-xs">
+          <p className="text-muted-foreground text-center text-xs">
             {login ? "Ainda não tem conta?" : "Já tem conta?"}{" "}
-            <button
+            <Button
               type="button"
-              className="text-primary-blue cursor-pointer border-0 bg-transparent p-0 font-bold"
+              variant="link"
+              className="h-auto p-0 font-bold"
               onClick={toggleLogin}
             >
               {login ? "Crie sua conta" : "Faça login"}
-            </button>
+            </Button>
           </p>
 
-          <Button
-            type="submit"
-            disabled={isLoading}
-            className="hover:bg-primary-blue h-10 w-full rounded-md bg-[#0c29ab] text-sm disabled:opacity-50"
-          >
-            <LogInIcon className="size-6" />
+          <Button type="submit" disabled={isLoading} className="w-full">
+            <LogInIcon className="mr-2 size-4" />
             {isLoading ? "Carregando..." : login ? "Entrar" : "Criar Conta"}
           </Button>
         </div>
