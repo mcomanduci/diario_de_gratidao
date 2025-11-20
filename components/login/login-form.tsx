@@ -72,6 +72,7 @@ export default function LoginForm() {
         }
 
         toast.success("Login realizado com sucesso!");
+        form.reset();
         router.push("/dashboard");
       } else {
         // Registro
@@ -87,6 +88,7 @@ export default function LoginForm() {
         }
 
         toast.success("Conta criada com sucesso!");
+        form.reset();
         router.push("/dashboard");
       }
     } catch (error) {

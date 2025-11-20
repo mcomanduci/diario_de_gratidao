@@ -17,9 +17,9 @@ export default function Home() {
             <LaughIcon className="text-primary size-8" />
           </div>
           <div className="space-y-1">
-            <CardTitle className="text-2xl font-bold">Bem-vindo</CardTitle>
+            <CardTitle className="text-2xl font-bold text-primary">Diário de Gratidão</CardTitle>
             <CardDescription className="text-base">
-              Diário de Gratidão
+              Bem-vindo
             </CardDescription>
           </div>
         </CardHeader>

@@ -25,7 +25,7 @@ export default async function Content({
   return (
     <section className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold tracking-tight">
+        <h1 className="text-2xl font-bold tracking-tight text-primary capitalize">
           Meus diários de gratidão
         </h1>
         <Dialog>

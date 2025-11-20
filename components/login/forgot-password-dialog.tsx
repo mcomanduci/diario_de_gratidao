@@ -63,9 +63,7 @@ export default function ForgotPasswordDialog() {
     <DialogContent className="sm:max-w-sm">
       <form onSubmit={handleSubmit}>
         <DialogHeader>
-          <DialogTitle className="text-primary-blue">
-            Redefinir Senha
-          </DialogTitle>
+          <DialogTitle>Redefinir Senha</DialogTitle>
           <DialogDescription>
             Digite seu email para receber o link para redefinir sua senha.
           </DialogDescription>
@@ -88,7 +86,7 @@ export default function ForgotPasswordDialog() {
           <Button
             type="submit"
             disabled={loading}
-            className="bg-primary-blue hover:bg-primary-blue/90 h-11 flex-1 cursor-pointer"
+            className="bg-primary hover:bg-primary/90 h-11 flex-1 cursor-pointer"
           >
             {loading ? "Enviando..." : "Resetar senha"}
           </Button>
