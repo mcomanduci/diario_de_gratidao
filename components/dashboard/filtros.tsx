@@ -1,8 +1,8 @@
 "use client";
 
-import { SearchIcon } from "lucide-react";
-import { useState, useTransition } from "react";
-import { getDiarios } from "@/actions/diarios";
+import { SearchIcon, XIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import {
   Select,
   SelectContent,
@@ -17,39 +17,31 @@ import DiarioItem from "./diario-item";
 import EmptyDiario from "./empty-diario";
 
 interface FiltrosProps {
-  initialDiarios: Diario[];
+  diarios: Diario[];
+  searchParams: { search?: string; type?: string };
 }
 
-export default function Filtros({ initialDiarios }: FiltrosProps) {
-  const [search, setSearch] = useState("");
-  const [type, setType] = useState("Todos");
-  const [diarios, setDiarios] = useState<Diario[]>(initialDiarios);
-  const [isPending, startTransition] = useTransition();
-  const [hasSearched, setHasSearched] = useState(false);
+export default function Filtros({ diarios, searchParams }: FiltrosProps) {
+  const router = useRouter();
+  const [search, setSearch] = useState(searchParams.search || "");
+  const [type, setType] = useState(searchParams.type || "Todos");
+
+  const updateURL = (newSearch: string, newType: string) => {
+    const params = new URLSearchParams();
+    if (newSearch) params.set("search", newSearch);
+    if (newType && newType !== "Todos") params.set("type", newType);
+
+    const query = params.toString();
+    router.push(query ? `/dashboard?${query}` : "/dashboard");
+  };
 
   const handleSearch = () => {
-    setHasSearched(true);
-    startTransition(async () => {
-      const result = await getDiarios({ search, type });
-      if (result.success) {
-        setDiarios(result.diarios);
-      }
-    });
+    updateURL(search, type);
   };
 
   const handleTypeChange = (newType: string) => {
     setType(newType);
-    if (newType !== "Todos") {
-      setHasSearched(true);
-    } else {
-      setHasSearched(false);
-    }
-    startTransition(async () => {
-      const result = await getDiarios({ search, type: newType });
-      if (result.success) {
-        setDiarios(result.diarios);
-      }
-    });
+    updateURL(search, newType);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -58,18 +50,40 @@ export default function Filtros({ initialDiarios }: FiltrosProps) {
     }
   };
 
+  const handleClearSearch = () => {
+    setSearch("");
+    updateURL("", type);
+  };
+
+  const hasActiveFilters =
+    searchParams.search || (searchParams.type && searchParams.type !== "Todos");
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row">
         <div className="flex flex-1 gap-2">
-          <Input
-            className="flex-1"
-            placeholder="Pesquise por nome"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            onKeyDown={handleKeyDown}
-          />
-          <Button onClick={handleSearch} disabled={isPending}>
+          <div className="relative flex-1">
+            <Input
+              className="pr-8"
+              placeholder="Pesquise por nome"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              onKeyDown={handleKeyDown}
+            />
+            {search && (
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="absolute top-0 right-0 h-full px-2 hover:bg-transparent"
+                onClick={handleClearSearch}
+              >
+                <XIcon className="text-muted-foreground size-4" />
+                <span className="sr-only">Limpar busca</span>
+              </Button>
+            )}
+          </div>
+          <Button onClick={handleSearch}>
             <SearchIcon className="size-4" />
             <span className="sr-only">Buscar</span>
           </Button>
@@ -88,19 +102,13 @@ export default function Filtros({ initialDiarios }: FiltrosProps) {
         </Select>
       </div>
 
-      {hasSearched ? (
+      {hasActiveFilters && (
         <p className="text-muted-foreground text-sm">
-          {isPending
-            ? "Buscando..."
-            : `${diarios.length} resultado(s) encontrado(s)`}
+          {diarios.length} resultado(s) encontrado(s)
         </p>
-      ) : null}
+      )}
 
-      {isPending ? (
-        <div className="py-8 text-center">
-          <p className="text-muted-foreground">Carregando...</p>
-        </div>
-      ) : diarios.length > 0 ? (
+      {diarios.length > 0 ? (
         <div className="flex flex-col gap-4">
           {diarios.map((diario) => (
             <DiarioItem key={diario.id} diario={diario} />
@@ -108,7 +116,7 @@ export default function Filtros({ initialDiarios }: FiltrosProps) {
         </div>
       ) : (
         <div>
-          {search || type !== "Todos" ? (
+          {hasActiveFilters ? (
             <div className="py-8 text-center">
               <p className="text-muted-foreground">
                 Nenhum diário encontrado com os filtros aplicados.

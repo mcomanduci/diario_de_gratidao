@@ -5,14 +5,22 @@ import { getCachedDiarios, getCurrentUser } from "@/lib/data";
 import Filtros from "./filtros";
 import NewDiarioContent from "./new-diario-content";
 
-export default async function Content() {
+export default async function Content({
+  searchParams,
+}: {
+  searchParams: Promise<{ search?: string; type?: string }>;
+}) {
   const user = await getCurrentUser();
 
   if (!user) {
     return <div>Not authenticated</div>;
   }
 
-  const diarios = await getCachedDiarios(user.id);
+  const params = await searchParams;
+  const diarios = await getCachedDiarios(user.id, {
+    search: params.search,
+    type: params.type,
+  });
 
   return (
     <section className="flex flex-col gap-4">
@@ -31,7 +39,7 @@ export default async function Content() {
         </Dialog>
       </div>
 
-      <Filtros initialDiarios={diarios} />
+      <Filtros diarios={diarios} searchParams={params} />
     </section>
   );
 }

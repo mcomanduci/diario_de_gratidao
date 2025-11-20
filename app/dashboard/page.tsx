@@ -10,7 +10,11 @@ export const metadata: Metadata = {
   description: "Gerencie seus registros de gratidão",
 };
 
-export default async function Dashboard() {
+export default async function Dashboard({
+  searchParams,
+}: {
+  searchParams: Promise<{ search?: string; type?: string }>;
+}) {
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
@@ -18,7 +22,7 @@ export default async function Dashboard() {
         <Sidebar />
         <main className="bg-muted/30 flex-1 p-6">
           <Suspense fallback={<ContentLoading />}>
-            <Content />
+            <Content searchParams={searchParams} />
           </Suspense>
         </main>
       </div>
