@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
-export default function ConfiguracoesPage() {
+export default async function ConfiguracoesPage() {
   return (
     <div className="flex min-h-screen flex-col">
       <Header />

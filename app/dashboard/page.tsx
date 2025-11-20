@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   description: "Gerencie seus registros de gratidão",
 };
 
-export default function Dashboard() {
+export default async function Dashboard() {
   return (
     <div className="flex min-h-screen flex-col">
       <Suspense

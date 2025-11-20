@@ -1,12 +1,18 @@
 import { PlusIcon } from "lucide-react";
-import { getDiarios } from "@/actions/diarios";
+import { getCurrentUser, getCachedDiarios } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import Filtros from "./filtros";
 import NewDiarioContent from "./new-diario-content";
 
 export default async function Content() {
-  const { diarios } = await getDiarios();
+  const user = await getCurrentUser();
+  
+  if (!user) {
+    return <div>Not authenticated</div>;
+  }
+
+  const diarios = await getCachedDiarios(user.id);
 
   return (
     <section className="flex flex-col gap-4">

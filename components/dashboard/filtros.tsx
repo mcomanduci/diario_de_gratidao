@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { getDiarios } from "@/actions/diarios";
 import {
   Select,
@@ -11,54 +11,70 @@ import {
 } from "@/components/ui/select";
 import type { Diario } from "@/types/types";
 import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { SearchIcon } from "lucide-react";
 import DiarioItem from "./diario-item";
 import EmptyDiario from "./empty-diario";
 
 interface FiltrosProps {
   initialDiarios: Diario[];
-  initialSearch?: string;
-  initialType?: string;
 }
 
-export default function Filtros({
-  initialDiarios,
-  initialSearch = "",
-  initialType = "Todos",
-}: FiltrosProps) {
-  const [search, setSearch] = useState(initialSearch);
-  const [type, setType] = useState(initialType);
+export default function Filtros({ initialDiarios }: FiltrosProps) {
+  const [search, setSearch] = useState("");
+  const [type, setType] = useState("Todos");
   const [diarios, setDiarios] = useState<Diario[]>(initialDiarios);
   const [isPending, startTransition] = useTransition();
+  const [hasSearched, setHasSearched] = useState(false);
 
-  // Sincroniza com initialDiarios quando mudar (após revalidatePath)
-  useEffect(() => {
-    setDiarios(initialDiarios);
-  }, [initialDiarios]);
+  const handleSearch = () => {
+    setHasSearched(true);
+    startTransition(async () => {
+      const result = await getDiarios({ search, type });
+      if (result.success) {
+        setDiarios(result.diarios);
+      }
+    });
+  };
 
-  // Debounce da busca
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      startTransition(async () => {
-        const result = await getDiarios({ search, type });
-        if (result.success) {
-          setDiarios(result.diarios);
-        }
-      });
-    }, 300);
+  const handleTypeChange = (newType: string) => {
+    setType(newType);
+    if (newType !== "Todos") {
+      setHasSearched(true);
+    } else {
+      setHasSearched(false);
+    }
+    startTransition(async () => {
+      const result = await getDiarios({ search, type: newType });
+      if (result.success) {
+        setDiarios(result.diarios);
+      }
+    });
+  };
 
-    return () => clearTimeout(timer);
-  }, [search, type]);
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
 
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row">
-        <Input
-          className="flex-1"
-          placeholder="Pesquise por nome"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        <Select value={type} onValueChange={setType}>
+        <div className="flex flex-1 gap-2">
+          <Input
+            className="flex-1"
+            placeholder="Pesquise por nome"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            onKeyDown={handleKeyDown}
+          />
+          <Button onClick={handleSearch} disabled={isPending}>
+            <SearchIcon className="size-4" />
+            <span className="sr-only">Buscar</span>
+          </Button>
+        </div>
+        <Select value={type} onValueChange={handleTypeChange}>
           <SelectTrigger className="w-full sm:w-[200px]">
             <SelectValue placeholder="Selecione" />
           </SelectTrigger>
@@ -72,7 +88,7 @@ export default function Filtros({
         </Select>
       </div>
 
-      {search || type !== "Todos" ? (
+      {hasSearched ? (
         <p className="text-muted-foreground text-sm">
           {isPending
             ? "Buscando..."
