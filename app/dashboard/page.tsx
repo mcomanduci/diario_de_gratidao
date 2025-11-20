@@ -13,13 +13,7 @@ export const metadata: Metadata = {
 export default async function Dashboard() {
   return (
     <div className="flex min-h-screen flex-col">
-      <Suspense
-        fallback={
-          <div className="bg-background flex h-16 items-center justify-between border-b px-6" />
-        }
-      >
-        <Header />
-      </Suspense>
+      <Header />
       <div className="flex flex-1">
         <Sidebar />
         <main className="bg-muted/30 flex-1 p-6">

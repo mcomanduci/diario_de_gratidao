@@ -109,11 +109,7 @@ export function ResetPasswordForm() {
                 autoComplete="new-password"
               />
             </div>
-            <Button
-              type="submit"
-              disabled={loading}
-              className="h-11 w-full"
-            >
+            <Button type="submit" disabled={loading} className="h-11 w-full">
               {loading ? "Redefinindo..." : "Redefinir Senha"}
             </Button>
           </form>
@@ -122,4 +118,3 @@ export function ResetPasswordForm() {
     </div>
   );
 }
-

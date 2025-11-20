@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import ChangePasswordForm from "@/components/configuracoes/change-password-form";
 import ChangeUsernameForm from "@/components/configuracoes/change-username-form";
 import Header from "@/components/dashboard/header";
@@ -15,18 +14,7 @@ import { Separator } from "@/components/ui/separator";
 export default function ConfiguracoesPage() {
   return (
     <div className="flex min-h-screen flex-col">
-      <Suspense fallback={
-        <header className="bg-background flex h-16 items-center justify-between border-b px-6">
-          <div className="flex items-center gap-2">
-            <div className="bg-primary text-primary-foreground flex h-8 w-8 items-center justify-center rounded-lg">
-              <span>📔</span>
-            </div>
-            <span className="text-foreground font-semibold">Diário de Gratidão</span>
-          </div>
-        </header>
-      }>
-        <Header />
-      </Suspense>
+      <Header />
       <div className="flex flex-1">
         <Sidebar />
         <main className="bg-muted/30 flex-1 p-6">
