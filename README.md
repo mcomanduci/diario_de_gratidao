@@ -16,36 +16,42 @@ Uma aplicação web moderna para registrar e gerenciar seus momentos de gratidã
 ## 🚀 Tecnologias
 
 ### Core
+
 - **[Next.js 16](https://nextjs.org/)** - Framework React com App Router
 - **[React 19](https://react.dev/)** - Biblioteca UI
 - **[TypeScript](https://www.typescriptlang.org/)** - Tipagem estática
 
 ### UI & Estilização
+
 - **[Tailwind CSS 4](https://tailwindcss.com/)** - Framework CSS utility-first
 - **[Shadcn UI](https://ui.shadcn.com/)** - Componentes UI acessíveis e customizáveis
 - **[Radix UI](https://www.radix-ui.com/)** - Primitivos de UI sem estilo
 - **[Lucide React](https://lucide.dev/)** - Ícones modernos
 
 ### Backend & Database
+
 - **[Drizzle ORM](https://orm.drizzle.team/)** - ORM TypeScript-first
 - **[Neon Database](https://neon.tech/)** - PostgreSQL serverless
 - **[Better Auth](https://www.better-auth.com/)** - Autenticação moderna
 
 ### Validação & Forms
+
 - **[Zod](https://zod.dev/)** - Validação de schemas TypeScript
 - **[React Hook Form](https://react-hook-form.com/)** - Gerenciamento de formulários
 
 ### Upload & Storage
+
 - **[Cloudinary](https://cloudinary.com/)** - Gerenciamento de imagens na nuvem
 - **[Next Cloudinary](https://next.cloudinary.dev/)** - Integração Cloudinary/Next.js
 
 ### Ferramentas de Desenvolvimento
+
 - **[Biome](https://biomejs.dev/)** - Linter e formatador ultrarrápido
 - **[Drizzle Kit](https://orm.drizzle.team/kit-docs/overview)** - Migrações de banco de dados
 
 ## 📋 Pré-requisitos
 
-- Node.js 20+ 
+- Node.js 20+
 - pnpm (gerenciador de pacotes)
 - Conta no Neon Database
 - Conta no Cloudinary
@@ -54,19 +60,22 @@ Uma aplicação web moderna para registrar e gerenciar seus momentos de gratidã
 ## 🔧 Instalação
 
 1. **Clone o repositório**
+
    ```bash
    git clone <url-do-repositorio>
    cd diario
    ```
 
 2. **Instale as dependências**
+
    ```bash
    pnpm install
    ```
 
 3. **Configure as variáveis de ambiente**
-   
+
    Crie um arquivo `.env.local` na raiz do projeto:
+
    ```env
    # Database
    DATABASE_URL=sua_url_do_neon_database
@@ -85,17 +94,19 @@ Uma aplicação web moderna para registrar e gerenciar seus momentos de gratidã
    ```
 
 4. **Execute as migrações do banco de dados**
+
    ```bash
    pnpm drizzle-kit push
    ```
 
 5. **Inicie o servidor de desenvolvimento**
+
    ```bash
    pnpm dev
    ```
 
 6. **Acesse a aplicação**
-   
+
    Abra [http://localhost:3000](http://localhost:3000) no seu navegador
 
 ## 📁 Estrutura do Projeto
@@ -148,23 +159,27 @@ pnpm drizzle-kit studio   # Abre Drizzle Studio
 ## 🔑 Funcionalidades Principais
 
 ### Autenticação
+
 - Login com email e senha
 - Registro de novos usuários
 - Recuperação de senha via email
 - Sessões seguras com Better Auth
 
 ### Diários de Gratidão
+
 - Criar novos diários com título, descrição, tipo e imagem
 - Editar diários existentes
 - Excluir diários com confirmação
 - Visualizar lista de todos os diários
 
 ### Busca e Filtros
+
 - Busca por título de diário
 - Filtro por tipo (Família, Trabalho, Religioso, Outros)
 - Contador de resultados
 
 ### Perfil do Usuário
+
 - Atualizar nome de usuário
 - Alterar senha
 - Avatar personalizado
@@ -172,6 +187,7 @@ pnpm drizzle-kit studio   # Abre Drizzle Studio
 ## 🎨 Design System
 
 O projeto utiliza o **Shadcn UI** com o tema **Blue**, proporcionando:
+
 - Interface limpa e moderna
 - Componentes acessíveis (WCAG)
 - Responsividade em todos os dispositivos
@@ -206,4 +222,3 @@ Desenvolvido com ❤️ usando as melhores práticas do ecossistema Next.js
 **Versão**: 0.1.0  
 **Node**: 20+  
 **Package Manager**: pnpm
-
