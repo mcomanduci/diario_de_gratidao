@@ -1,13 +1,13 @@
 import { PlusIcon } from "lucide-react";
-import { getCurrentUser, getCachedDiarios } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { getCachedDiarios, getCurrentUser } from "@/lib/data";
 import Filtros from "./filtros";
 import NewDiarioContent from "./new-diario-content";
 
 export default async function Content() {
   const user = await getCurrentUser();
-  
+
   if (!user) {
     return <div>Not authenticated</div>;
   }

@@ -1,5 +1,6 @@
 "use client";
 
+import { SearchIcon } from "lucide-react";
 import { useState, useTransition } from "react";
 import { getDiarios } from "@/actions/diarios";
 import {
@@ -10,9 +11,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { Diario } from "@/types/types";
-import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { SearchIcon } from "lucide-react";
+import { Input } from "../ui/input";
 import DiarioItem from "./diario-item";
 import EmptyDiario from "./empty-diario";
 
