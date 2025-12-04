@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import ChangePasswordForm from "@/components/configuracoes/change-password-form";
 import ChangeUsernameForm from "@/components/configuracoes/change-username-form";
 import Header from "@/components/dashboard/header";
@@ -11,12 +12,14 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
-export default function ConfiguracoesPage() {
+export default async function ConfiguracoesPage() {
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
       <div className="flex flex-1">
-        <Sidebar />
+        <Suspense fallback={<div className="hidden w-64 md:block" />}>
+          <Sidebar />
+        </Suspense>
         <main className="bg-muted/30 flex-1 p-6">
           <div className="space-y-6">
             <div>

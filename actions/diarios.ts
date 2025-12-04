@@ -1,11 +1,12 @@
 "use server";
 
-import { and, desc, eq, ilike } from "drizzle-orm";
+import { and, desc, eq, gte, ilike, lte } from "drizzle-orm";
+import { differenceInCalendarDays } from "date-fns";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { z } from "zod";
 import { db } from "@/db/drizzle";
-import { diario } from "@/db/schema";
+import { diario, user } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import {
   CLOUDINARY_URL_PREFIX,
@@ -37,7 +38,6 @@ const diarioSchema = z.object({
       "URL de imagem deve ser do Cloudinary",
     ),
 });
-
 export async function getDiarios(filters?: {
   search?: string;
   type?: string;
@@ -181,17 +181,60 @@ export async function createDiario(data: {
     // Valida os dados de entrada
     const validatedData = diarioSchema.parse(data);
 
+    const [currentUser] = await db
+      .select()
+      .from(user)
+      .where(eq(user.id, session.user.id))
+      .limit(1);
+
+    if (!currentUser) {
+      return { error: "User not found" };
+    }
+
+    const now = new Date();
+    let newStreak = currentUser.streak;
+    const lastLog = currentUser.lastLogDate;
+
+    if (lastLog) {
+      const daysDiff = differenceInCalendarDays(now, lastLog);
+
+      if (daysDiff === 1) {
+        // Consecutive day: increment streak
+        newStreak += 1;
+      } else if (daysDiff > 1) {
+        // Missed a day (or more): reset streak to 1
+        newStreak = 1;
+      }
+      // If daysDiff === 0 (same day), keep streak as is
+    } else {
+      // First ever log
+      newStreak = 1;
+    }
+
     const id = crypto.randomUUID();
 
-    await db.insert(diario).values({
-      id,
-      title: validatedData.title,
-      description: validatedData.description,
-      type: validatedData.type,
-      image: validatedData.image,
-      userId: session.user.id,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+    await db.transaction(async (tx) => {
+      await tx.insert(diario).values({
+        id,
+        userId: session.user.id,
+        title: validatedData.title,
+        description: validatedData.description,
+        type: validatedData.type,
+        image: validatedData.image,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+
+      // Update user streak and lastLogDate only if it's a new day
+      if (!lastLog || differenceInCalendarDays(now, lastLog) > 0) {
+        await tx
+          .update(user)
+          .set({
+            streak: newStreak,
+            lastLogDate: now,
+          })
+          .where(eq(user.id, session.user.id));
+      }
     });
 
     revalidatePath("/dashboard");
@@ -283,5 +326,113 @@ export async function deleteDiario(id: string) {
   } catch (error) {
     console.error("Erro ao deletar diário:", error);
     return { success: false, error: "Erro ao deletar diário" };
+  }
+}
+
+export async function getMonthlyStats() {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    if (!session?.user) {
+      return { success: false, error: "Não autenticado" };
+    }
+
+    const now = new Date();
+    const start = new Date(now.getFullYear(), now.getMonth(), 1);
+    const end = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
+
+    const monthlyEntries = await db
+      .select()
+      .from(diario)
+      .where(
+        and(
+          eq(diario.userId, session.user.id),
+          gte(diario.createdAt, start),
+          lte(diario.createdAt, end),
+        ),
+      );
+
+    // 1. Total Entries
+    const totalEntries = monthlyEntries.length;
+
+    // 2. Entries by Day (for Bar Chart)
+    const entriesByDayMap = new Map<number, number>();
+    // Initialize all days in month with 0
+    const daysInMonth = end.getDate();
+    for (let i = 1; i <= daysInMonth; i++) {
+      entriesByDayMap.set(i, 0);
+    }
+
+    monthlyEntries.forEach((entry) => {
+      const day = entry.createdAt.getDate();
+      entriesByDayMap.set(day, (entriesByDayMap.get(day) || 0) + 1);
+    });
+
+    const chartData = Array.from(entriesByDayMap.entries()).map(
+      ([day, count]) => ({
+        day: day.toString(),
+        entries: count,
+      }),
+    );
+
+    // 3. Top Category
+    const categoryMap = new Map<string, number>();
+    monthlyEntries.forEach((entry) => {
+      categoryMap.set(entry.type, (categoryMap.get(entry.type) || 0) + 1);
+    });
+
+    let topCategory = "Nenhuma";
+    let maxCount = 0;
+    categoryMap.forEach((count, category) => {
+      if (count > maxCount) {
+        maxCount = count;
+        topCategory = category;
+      }
+    });
+
+    const categoryData = Array.from(categoryMap.entries()).map(
+      ([name, value]) => ({
+        name,
+        value,
+      }),
+    );
+
+    return {
+      success: true,
+      stats: {
+        totalEntries,
+        topCategory,
+        chartData,
+        categoryData,
+      },
+    };
+  } catch (error) {
+    console.error("Erro ao buscar estatísticas:", error);
+    return { success: false, error: "Erro ao buscar estatísticas" };
+  }
+}
+
+export async function exportUserData() {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    if (!session?.user) {
+      return { success: false, error: "Não autenticado" };
+    }
+
+    const allEntries = await db
+      .select()
+      .from(diario)
+      .where(eq(diario.userId, session.user.id))
+      .orderBy(desc(diario.createdAt));
+
+    return { success: true, data: allEntries };
+  } catch (error) {
+    console.error("Erro ao exportar dados:", error);
+    return { success: false, error: "Erro ao exportar dados" };
   }
 }

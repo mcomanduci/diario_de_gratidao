@@ -4,7 +4,7 @@ import { and, desc, eq, ilike } from "drizzle-orm";
 import { headers } from "next/headers";
 import { cache } from "react";
 import { db } from "@/db/drizzle";
-import { diario } from "@/db/schema";
+import { diario, user } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import type { Diario } from "@/types/types";
 
@@ -45,9 +45,19 @@ export const getCachedDiarios = cache(
 );
 
 // Get current user session
+// Get current user session and full DB data
 export async function getCurrentUser() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
-  return session?.user;
+
+  if (!session?.user) return null;
+
+  const [currentUser] = await db
+    .select()
+    .from(user)
+    .where(eq(user.id, session.user.id))
+    .limit(1);
+
+  return currentUser;
 }
